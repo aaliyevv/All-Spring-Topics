@@ -31,4 +31,6 @@ public class AppointmentEntity {
     @JoinColumn(name = "dostor_id")
     private DoctorEntity doctor;
 
+    // Appointment is the owner side of the relationship (because it has foreign keys).
+
 }
