@@ -19,7 +19,7 @@ public class AppointmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate appointmentData;
+    private LocalDate appointmentDate;
 
     //Foreign Key
     @ManyToOne
@@ -30,6 +30,8 @@ public class AppointmentEntity {
     @ManyToOne
     @JoinColumn(name = "dostor_id")
     private DoctorEntity doctor;
+
+
 
     // Appointment is the owner side of the relationship (because it has foreign keys).
 

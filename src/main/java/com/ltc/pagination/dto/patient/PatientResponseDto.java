@@ -13,5 +13,9 @@ public class PatientResponseDto {
     private String fullName;
     private String email;
     private String phoneNumber;
+    private Long doctorId;
 
+    public PatientResponseDto(
+            Long id, String fullName, String email, String phoneNumber) {
+    }
 }

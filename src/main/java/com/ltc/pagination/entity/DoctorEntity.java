@@ -1,5 +1,6 @@
 package com.ltc.pagination.entity;
 
+import com.ltc.pagination.enumaration.Specialization;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,10 @@ public class DoctorEntity {
     private Long id;
 
     private String fullName;
-    private String specialization;
+
+    @Enumerated(EnumType.STRING)  // .ORDINAL returns 0, 1
+    private Specialization specialization;
+
     private boolean available;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
