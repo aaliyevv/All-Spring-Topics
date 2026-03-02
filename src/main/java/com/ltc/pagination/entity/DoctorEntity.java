@@ -19,6 +19,7 @@ public class DoctorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String fullName;
 
     @Enumerated(EnumType.STRING)  // .ORDINAL returns 0, 1
@@ -26,7 +27,9 @@ public class DoctorEntity {
 
     private boolean available;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+
     private List<AppointmentEntity> appointments;
 
 }

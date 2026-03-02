@@ -2,6 +2,7 @@ package com.ltc.pagination.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class AppointmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @FutureOrPresent
     private LocalDate appointmentDate;
 
     //Foreign Key
@@ -31,8 +33,7 @@ public class AppointmentEntity {
     @JoinColumn(name = "dostor_id")
     private DoctorEntity doctor;
 
-
-
-    // Appointment is the owner side of the relationship (because it has foreign keys).
+    // Appointment is the owner side of the relationship
+    // (because it has foreign keys).
 
 }
