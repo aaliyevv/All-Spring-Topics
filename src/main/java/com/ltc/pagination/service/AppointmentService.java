@@ -28,4 +28,34 @@ public class AppointmentService {
         this.patientRepo = patientRepo;
     }
 
-    
+    public AppointmentResponseDto createAppointment(Long patientId, Long doctorId, LocalDate appointmentDate) {
+
+        PatientEntity patient = patientRepo.findById(patientId)
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found: " + patientId));
+
+        DoctorEntity doctor = doctorRepo.findById(doctorId)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found: " + doctorId));
+
+        if (!doctor.isAvailable()){
+            throw new DoctorNotFoundException("Doctor not available");
+        }
+
+        boolean exists = appointmentRepo
+                .existsByDoctorIdAndAppointmentDate(doctorId, appointmentDate);
+
+        if (exists){
+            throw new AppointmentAlreadyExistsException("Appointment already exists!");
+        }
+
+        AppointmentEntity appointment = new AppointmentEntity();
+        appointment.setAppointmentDate(appointmentDate);
+        appointment.setPatient(patient);
+        appointment.setDoctor(doctor);
+
+        AppointmentEntity saved = appointmentRepo.save(appointment);
+
+        return new AppointmentResponseDto(
+                saved.getId(), saved.getAppointmentDate(), patientId, doctorId);
+    }
+
+   
