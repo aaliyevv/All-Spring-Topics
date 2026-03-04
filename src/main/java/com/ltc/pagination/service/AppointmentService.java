@@ -58,4 +58,33 @@ public class AppointmentService {
                 saved.getId(), saved.getAppointmentDate(), patientId, doctorId);
     }
 
-   
+    public Page<AppointmentResponseDto> getAll(Pageable pageable){
+
+        return appointmentRepo.findAll(pageable).map(
+                a -> new AppointmentResponseDto(
+                        a.getId(),
+                        a.getAppointmentDate(),
+                        a.getPatient().getId(),
+                        a.getDoctor().getId()
+                ));
+    }
+
+    public AppointmentResponseDto getById(Long id){
+
+        AppointmentEntity appointment = appointmentRepo.findById(id)
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + id));
+
+        return new AppointmentResponseDto(
+                appointment.getId(),
+                appointment.getAppointmentDate(),
+                appointment.getPatient().getId(),
+                appointment.getDoctor().getId());
+    }
+
+    public AppointmentResponseDto updateAppointment(
+            Long id, Long patientId, Long doctorId, LocalDate appointmentDate) {
+
+        AppointmentEntity appointment = appointmentRepo.findById(id)
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + id));
+
+
