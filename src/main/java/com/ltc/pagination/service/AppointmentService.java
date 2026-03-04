@@ -87,4 +87,40 @@ public class AppointmentService {
         AppointmentEntity appointment = appointmentRepo.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + id));
 
+        PatientEntity patient = patientRepo.findById(patientId)
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found: " + patientId));
 
+        DoctorEntity doctor = doctorRepo.findById(doctorId)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found: " + doctorId));
+
+        if (!doctor.isAvailable()){
+            throw new DoctorNotAvailableException("Doctor not available");
+        }
+
+        boolean exists = appointmentRepo
+                .existsByDoctorIdAndAppointmentDate(doctorId, appointmentDate);
+
+        if (exists){
+            throw new AppointmentAlreadyExistsException("Appointment already exists!");
+        }appointment.setPatient(patient);
+        appointment.setDoctor(doctor);
+        appointment.setAppointmentDate(appointmentDate);
+
+        AppointmentEntity updated = appointmentRepo.save(appointment);
+        return new AppointmentResponseDto(
+                updated.getId(),
+                updated.getAppointmentDate(),
+                patientId,
+                doctorId
+        );
+    }
+
+
+    public void deleteById(Long id){
+
+        AppointmentEntity appointment = appointmentRepo.findById(id)
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + id));
+
+        appointmentRepo.delete(appointment);
+    }
+}
