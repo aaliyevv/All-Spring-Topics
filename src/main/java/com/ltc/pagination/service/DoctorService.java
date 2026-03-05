@@ -63,3 +63,22 @@ public class DoctorService {
         doctor.setFullName(doctorRequestDto.getFullName());
         doctor.setSpecialization(doctorRequestDto.getSpecialization());
         doctor.setAvailable(doctorRequestDto.isAvailable());
+
+        DoctorEntity updatedDoctor = doctorRepo.save(doctor);
+
+        return new DoctorResponseDto(
+                updatedDoctor.getId(), updatedDoctor.getFullName(), updatedDoctor.getSpecialization(), updatedDoctor.isAvailable());
+    }
+
+    public void deleteDoctorById(Long id) {
+
+        DoctorEntity doctor = doctorRepo.findById(id)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found: " + id));
+
+        if (!doctor.getAppointments().isEmpty()) {
+            throw new DoctorHasAppointmentException("Cannot delete patient with appointments. Patient id: " + id);
+        }
+
+        doctorRepo.delete(doctor);
+    }
+}
