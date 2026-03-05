@@ -31,3 +31,35 @@ public class DoctorService {
                         d.isAvailable()
                 ));
     }
+
+    public DoctorResponseDto getDoctorById(Long id) {
+
+        DoctorEntity doctor = doctorRepo.findById(id)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found: " + id));
+        return new DoctorResponseDto(
+                doctor.getId(), doctor.getFullName(), doctor.getSpecialization(), doctor.isAvailable());
+
+    }
+
+    public DoctorResponseDto createDoctor(DoctorRequestDto doctorRequestDto) {
+
+        DoctorEntity doctorEntity = new DoctorEntity();
+
+        doctorEntity.setFullName(doctorRequestDto.getFullName());
+        doctorEntity.setSpecialization(doctorRequestDto.getSpecialization());
+        doctorEntity.setAvailable(doctorRequestDto.isAvailable());
+
+        DoctorEntity savedDoctor = doctorRepo.save(doctorEntity);
+
+        return new DoctorResponseDto(
+                savedDoctor.getId(), savedDoctor.getFullName(), savedDoctor.getSpecialization(), savedDoctor.isAvailable());
+    }
+
+    public DoctorResponseDto updateDoctor(Long id, DoctorRequestDto doctorRequestDto) {
+
+        DoctorEntity doctor = doctorRepo.findById(id)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found: " + id));
+
+        doctor.setFullName(doctorRequestDto.getFullName());
+        doctor.setSpecialization(doctorRequestDto.getSpecialization());
+        doctor.setAvailable(doctorRequestDto.isAvailable());
