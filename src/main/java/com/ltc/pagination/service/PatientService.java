@@ -43,4 +43,35 @@ public class PatientService {
 
     }
 
-    
+    public Page<PatientResponseDto> getAllPatients(Pageable pageable) {
+        return patientRepo.findAll(pageable)
+                .map(p -> new PatientResponseDto(
+                        p.getId(),
+                        p.getFullName(),
+                        p.getEmail(),
+                        p.getPhoneNumber(),
+                        null
+                ));
+    }
+
+    public List<PatientResponseDto> getPatientByDoctorId(Long doctorId) {
+
+        DoctorEntity doctorEntity = doctorRepo.findById(doctorId)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found: " + doctorId));
+
+        List<PatientEntity> patients = patientRepo.findByDoctorId(doctorId);
+
+        if (patients.isEmpty()) {
+            throw new DoctorNotFoundException("No patient found for this doctor: " + doctorId );
+        }
+
+        return patients.stream().
+                map( p -> new PatientResponseDto(
+
+                        p.getId(),
+                        p.getFullName(),
+                        p.getEmail(),
+                        p.getPhoneNumber()
+
+                )).toList();
+    }
