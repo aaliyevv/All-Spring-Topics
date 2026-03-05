@@ -18,3 +18,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+@Service
+public class PatientService {
+
+    private final PatientRepo patientRepo;
+    private final DoctorRepo doctorRepo;
+
+    public PatientService(PatientRepo patientRepo, DoctorRepo doctorRepo) {
+        this.patientRepo = patientRepo;
+        this.doctorRepo = doctorRepo;
+    }
+
+    public PatientResponseDto createPatient(PatientRequestDto patientRequestDto) {
+
+        PatientEntity patientEntity = new PatientEntity();
+
+        patientEntity.setFullName(patientRequestDto.getFullName());
+        patientEntity.setEmail(patientRequestDto.getEmail());
+        patientEntity.setPhoneNumber(patientRequestDto.getPhoneNumber());
+
+        PatientEntity db = patientRepo.save(patientEntity);
+
+        return new PatientResponseDto (db.getId(), db.getFullName(), db.getEmail(), db.getPhoneNumber());
+
+    }
+
+    
