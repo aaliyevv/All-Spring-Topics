@@ -25,3 +25,33 @@ public class DoctorController {
         Page<DoctorResponseDto> doctors = doctorService.getAllDoctors(pageable);
         return ResponseEntity.ok(doctors);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DoctorResponseDto> getDoctorById(@PathVariable Long id){
+
+        DoctorResponseDto doctor = doctorService.getDoctorById(id);
+        return ResponseEntity.ok(doctor);
+    }
+
+    @PostMapping
+    public ResponseEntity<DoctorResponseDto> creaateDoctor(@RequestBody DoctorRequestDto doctorRequestDto){
+
+        DoctorResponseDto saved = doctorService.createDoctor(doctorRequestDto);
+        return ResponseEntity.ok(saved);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DoctorResponseDto> updatedDoctor(
+            @PathVariable Long id, @RequestBody DoctorRequestDto doctorRequestDto){
+
+        DoctorResponseDto updated = doctorService.updateDoctor(id, doctorRequestDto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDoctor(@PathVariable Long id){
+
+        doctorService.deleteDoctorById(id);
+        return ResponseEntity.noContent().build();
+    }
+}
