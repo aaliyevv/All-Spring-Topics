@@ -75,3 +75,35 @@ public class PatientService {
 
                 )).toList();
     }
+
+    public PatientResponseDto getPatientById(Long id) {
+
+        PatientEntity patient = patientRepo.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found: " + id));
+        return new PatientResponseDto(patient
+                .getId(),
+                patient.getFullName(),
+                patient.getEmail(),
+                patient.getPhoneNumber(),
+                null);
+    }
+
+    public PatientResponseDto updatePatient (Long id, PatientRequestDto patientRequestDto) {
+
+        PatientEntity patient = patientRepo.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found: " + id));
+
+        patient.setFullName(patientRequestDto.getFullName());
+        patient.setEmail(patientRequestDto.getEmail());
+        patient.setPhoneNumber(patientRequestDto.getPhoneNumber());
+
+        PatientEntity db = patientRepo.save(patient);
+
+        return new PatientResponseDto(
+                db.getId(),
+                db.getFullName(),
+                db.getEmail(),
+                db.getPhoneNumber(),
+                null
+        );
+    }
