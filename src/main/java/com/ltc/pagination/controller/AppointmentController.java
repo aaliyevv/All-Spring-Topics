@@ -38,4 +38,29 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-    
+    @GetMapping("/{id}")
+    public ResponseEntity<AppointmentResponseDto> getById(@PathVariable Long id){
+
+        AppointmentResponseDto appointment = appointmentService.getById(id);
+        return ResponseEntity.ok(appointment);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AppointmentResponseDto> update(@PathVariable Long id,
+                                                         @PathVariable Long patientId,
+                                                         @PathVariable Long doctorId,
+                                                         @RequestParam LocalDate appointmentDate){
+
+        AppointmentResponseDto updated = appointmentService
+                .updateAppointment(id, patientId, doctorId, appointmentDate);
+        return ResponseEntity.ok(updated);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {
+
+        appointmentService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+}
