@@ -107,3 +107,15 @@ public class PatientService {
                 null
         );
     }
+
+    public void deletePatient(Long id){
+
+        PatientEntity patient = patientRepo.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found: " + id));
+        if (!patient.getAppointments().isEmpty()) {
+            throw new PatientHasAppointmentsException("Cannot delete patient with appointments. Patient id: " + id);
+        }
+
+        patientRepo.delete(patient);
+    }
+}
