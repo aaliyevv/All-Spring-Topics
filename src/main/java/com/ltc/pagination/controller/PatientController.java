@@ -52,5 +52,21 @@ public class PatientController {
         return ResponseEntity.ok(patient);
 
     }
-    
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PatientResponseDto> updatePatientById(
+            @RequestParam Long id, @RequestBody PatientRequestDto patientRequestDto) {
+
+        PatientResponseDto updated = patientService.updatePatient(id, patientRequestDto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePatientById(@PathVariable Long id) {
+
+        patientService.deletePatient(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
