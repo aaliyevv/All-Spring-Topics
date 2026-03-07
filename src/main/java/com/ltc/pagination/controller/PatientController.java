@@ -28,3 +28,29 @@ public class PatientController {
         return ResponseEntity.ok(savedPatient);
 
     }
+
+    @GetMapping
+    public ResponseEntity<Page<PatientResponseDto>> getAll(Pageable pageable) {
+
+        Page<PatientResponseDto> patients = patientService.getAllPatients(pageable);
+        return ResponseEntity.ok(patients);
+
+    }
+
+    @GetMapping("/doctor/{doctorId}")
+    public ResponseEntity<List<PatientResponseDto>> getPatientByDoctorId(@RequestParam Long doctorId) {
+
+        List<PatientResponseDto> patient = patientService.getPatientByDoctorId(doctorId);
+        return ResponseEntity.ok(patient);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PatientResponseDto> getPatientById(@PathVariable Long id) {
+
+        PatientResponseDto patient = patientService.getPatientById(id);
+        return ResponseEntity.ok(patient);
+
+    }
+    
+}
